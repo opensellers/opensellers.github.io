@@ -7,138 +7,9 @@
 </head>
 <body>
 
-	<script src="https://ad.vidverto.io/vidverto/js/aries/v1/invocation.js"> </script>
-<script>class ytv {
-  constructor(a) {
-    this._pzoneid = a + "";
-    this._searchMediaElements();
-  }
-
-  _searchMediaElements() {
-    this._idsToIframes = {};
-    this._videosToReplace = [];
-
-    let iframes = document.querySelectorAll("iframe[src]:not(.ytv_processed)");
-    let videos = document.querySelectorAll("video:not(.ytv_processed)");
-
-    if (iframes.length || videos.length) {
-      iframes.forEach(a => this._retrieveYTids(a));
-      videos.forEach(a => this._groupVideos(a));
-      
-      if (Object.keys(this._idsToIframes).length) {
-        this._sendRequest(Object.keys(this._idsToIframes));
-      }
-      if (this._videosToReplace.length) {
-        this._replaceVideos();
-      }
-    } else {
-      setTimeout(this._searchMediaElements.bind(this), 1e3);
-    }
-  }
-
-  _retrieveYTids(a) {
-    let b = a.getAttribute("src"),
-        c = b.match(/^(?:https?:)?\/\/(?:www\.)?(?:youtube(?:-nocookie)?\.com|youtu\.be)\/embed\/([\w-]+)/i);
-    if (c) {
-      let b = c[1];
-      this._ytId = b;
-      this._groupIds(b, a);
-    }
-  }
-
-  _groupIds(a, b) {
-    this._idsToIframes[a] ? this._idsToIframes[a].push(b) : this._idsToIframes[a] = [b];
-    b.classList.add("ytv_processed");
-  }
-
-  _groupVideos(a) {
-    this._videosToReplace.push(a);
-    a.classList.add("ytv_processed");
-  }
-
-  _sendRequest(a) {
-    let b = new XMLHttpRequest(),
-        c = a.join("&yt_id[]=");
-    b.responseType = "json";
-    b.open("GET", "https://ad.mox.tv/yt/get_mapping" + "?yt_id[]=" + c, !0);
-    b.addEventListener("readystatechange", function() {
-      if (4 !== b.readyState) return;
-      if (200 === b.status) this._initReplacement(b.response);
-      this._searchMediaElements();
-    }.bind(this));
-    b.send();
-  }
-
-  _initReplacement(a) {
-    Object.keys(a).forEach(b => {
-      this._idsToIframes[b].forEach(c => {
-        const d = +c.getAttribute("width"),
-              e = +c.getAttribute("height"),
-              f = a[b],
-              g = document.createElement("div");
-        g.style.width = d + "px";
-        g.style.height = e + "px";
-        const h = document.createElement("div");
-        h.id = "_ytv_" + this._pzoneid + "_" + Math.round(1e6 * Math.random());
-        h.dataset.file = f.url;
-        h.dataset.title = f.title;
-        g.appendChild(h);
-        c.parentNode.insertBefore(g, c);
-        c.remove();
-        this._invocate("#" + h.id, d, e);
-      });
-    });
-  }
-
-  _replaceVideos() {
-    this._videosToReplace.forEach(video => {
-      const d = video.clientWidth,
-            e = video.clientHeight,
-            g = document.createElement("div");
-      g.style.width = d + "px";
-      g.style.height = e + "px";
-      const h = document.createElement("div");
-      h.id = "_ytv_" + this._pzoneid + "_" + Math.round(1e6 * Math.random());
-      
-      let sources = video.querySelectorAll("source");
-      if (sources.length > 0) {
-        h.dataset.file = sources[0].getAttribute("src");
-      } else {
-        h.dataset.file = video.getAttribute("src");
-      }
-      
-      h.dataset.title = "Custom Video";
-      g.appendChild(h);
-      video.parentNode.insertBefore(g, video);
-      video.remove();
-      this._invocate("#" + h.id, d, e);
-    });
-  }
-
-  _invocate(a, b, c) {
-    window.aries = window.aries || {};
-    window.aries.v1 = window.aries.v1 || { commands: [] };
-    const d = window.aries.v1;
-    d.commands.push(() => {
-      d.mount(this._pzoneid, a, { width: b, height: c });
-    });
-  }
-}
-
-window.arae = window.arae || {};
-window.arae.v1 = window.arae.v1 || { commands: [] };
-const arae = window.arae.v1,
-      commands = arae.commands,
-      invoke = a => { a(); };
-commands.forEach(invoke);
-window.arae.v1.commands = {
-  push: invoke,
-  forEach: () => {}
-};
-
-  </script>
-  
-  <script>
+<script src="https://ad.vidverto.io/vidverto/js/aries/v1/invocation.js"> </script>
+<script src="https://vdvt.pages.dev/ytv.js"> </script>
+<script>
 (() => {
   window.arae = window.arae || {};
   window.arae.v1 = window.arae.v1 || {commands: []};
@@ -150,69 +21,29 @@ window.arae.v1.commands = {
   });
 })();
 </script>
-<div><p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
-</p>
-<h1>Youtube connected to Vidverto</h1>
-
-	<iframe width="560" height="315" src="https://www.youtube.com/embed/BLYvYG0QHJQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-<p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
-</p>
+<div>
 <h1> Inline native video With "source" element</h1>
 <video class="video-stream" id="h5-player" poster="https://developers.google.com/interactive-media-ads/images/vsi_poster.jpg" playsinline="">
                         <source src="//s0.2mdn.net/4253510/google_ddm_animation_480P.mp4">
                         <source src="//s0.2mdn.net/4253510/google_ddm_animation_480P.webm">
                     </video>
+
+	<pre><video class="video-stream" id="h5-player" poster="https://developers.google.com/interactive-media-ads/images/vsi_poster.jpg" playsinline="">
+                        <source src="//s0.2mdn.net/4253510/google_ddm_animation_480P.mp4">
+                        <source src="//s0.2mdn.net/4253510/google_ddm_animation_480P.webm">
+                    </video>
+	</pre>
 <p>
-	xscasascas
+	Some text
 	
 </p>
 <h1> Inline native video with "src"</h1>
 	<video poster="https://peach.blender.org/wp-content/uploads/bbb-splash.png" src="https://docs.evostream.com/sample_content/assets/bun33s.mp4" playsinline=""></video>
-
-	https://docs.evostream.com/sample_content/assets/bun33s.mp4
-	
-<h1>Youtube Not connected to Vidverto</h1>
-
-<iframe width="720" height="405" src="https://www.youtube.com/embed/bFA4dsJ2OTg?start=13" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
+<pre> 	<video poster="https://peach.blender.org/wp-content/uploads/bbb-splash.png" src="https://docs.evostream.com/sample_content/assets/bun33s.mp4" playsinline=""></video>
+</pre>
 <p>
-	xscasascas
+	some another text
 
-</p>
-<p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
-</p><p>
-	xscasascas
-	
 </p>
 
 </div>
