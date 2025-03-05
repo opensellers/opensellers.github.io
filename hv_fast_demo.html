@@ -8,8 +8,7 @@
 <body>
 
 	<script src="https://ad.vidverto.io/vidverto/js/aries/v1/invocation.js"> </script>
-<script>
-class ytv {
+<script>class ytv {
   constructor(a) {
     this._pzoneid = a + "";
     this._searchMediaElements();
@@ -100,7 +99,14 @@ class ytv {
       g.style.height = e + "px";
       const h = document.createElement("div");
       h.id = "_ytv_" + this._pzoneid + "_" + Math.round(1e6 * Math.random());
-      h.dataset.file = video.getAttribute("src");
+      
+      let sources = video.querySelectorAll("source");
+      if (sources.length > 0) {
+        h.dataset.file = sources[0].getAttribute("src");
+      } else {
+        h.dataset.file = video.getAttribute("src");
+      }
+      
       h.dataset.title = "Custom Video";
       g.appendChild(h);
       video.parentNode.insertBefore(g, video);
